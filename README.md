@@ -1,0 +1,2 @@
+# forexbot
+Forexbot for Slack
