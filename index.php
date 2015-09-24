@@ -1,9 +1,8 @@
 <?php
-//change this to $_POST during integration. $_GET is for test only
+//Get values from Slack
 $command = $_GET['command'];
 $text = $_GET['text'];
 
-$amount = 1;
 $from = "";
 $to = "";
 
@@ -13,34 +12,18 @@ $to = trim(substr($text, $to_pos, 4));
 $text = trim(str_replace($to, "", $text));
 
 //remove connectors
-$text = str_replace("in", "", $text);
 $text = str_replace("to", "", $text);
 
-$spaces = substr_count(trim($text), " ");
-
-//need to make sure that the currency codes are 3 letters
-if($spaces == 1)
-{
-    //get initial currency
-    $from_pos = strpos($text, " ");
-    $from = trim(substr($text, $from_pos, 4));
-    $text = trim(str_replace($from, "", $text));
-    
-    //get amount
-    $amount = intval($text); 
-}
-else
-{
-    $from = trim($text);
-}
+//get initial currency
+$from = trim($text);
 
 //connect to Google currency converter
-$get = file_get_contents('https://www.google.com/finance/converter?a='.$amount.'&from='.$from.'&to='.$to);
+$get = file_get_contents('https://www.google.com/finance/converter?a=1&from='.$from.'&to='.$to);
 $get = explode("<span class=bld>",$get);
 $get = explode("</span>",$get[1]);  
 $converted_amount = preg_replace("/[^0-9\.]/", null, $get[0]);
 
-echo $converted_amount;
+echo "1 ".strtoupper($from)." = ".$converted_amount." ".strtoupper($to);
 
 /*
 // set API Endpoint, Access Key, required parameters
